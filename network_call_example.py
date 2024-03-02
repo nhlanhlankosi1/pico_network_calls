@@ -5,17 +5,28 @@
 
 import network   # handles connecting to WiFi
 import urequests # handles making and servicing network requests
+import time
 
 # Connect to network
-wlan = network.WLAN(network.STA_IF)
-wlan.active(True)
+wifi = network.WLAN(network.STA_IF)
+wifi.active(True)
 
 # Fill in your network name (ssid) and password here:
-ssid = ''
-password = ''
-wlan.connect(ssid, password)
+ssid = 'iPhone X'
+password = 'MakerCulture7!'
+wifi.connect(ssid, password)
 
+# wait for the raspberry pi to be connected to the internet  
+while wifi.isconnected() == False:
+    print('Waiting for Connection . . .')
+    time.sleep(1)
 
+# get the ip address of the raspberry
+wifiInfo = wifi.ifconfig()
+IP_address = wifiInfo[0]
+print(IP_address)
+
+# make HTTP requests
 # Example 1. Make a GET request for google.com and print HTML
 # Print the html content from google.com
 print("1. Querying google.com:")
@@ -27,3 +38,6 @@ r.close()
 print("\n\n2. Querying the current GMT+0 time:")
 r = urequests.get("http://date.jsontest.com") # Server that returns the current GMT+0 time.
 print(r.json())
+
+
+
